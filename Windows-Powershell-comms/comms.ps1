@@ -33,3 +33,41 @@ Move-Item -Path .\captain-cabin\captain-hat.txt -Destination .\captain-cabin\cap
 
 #Displays the content of a file
 Get-Content -Path ".\captain-hat.txt"   /   type captain-hat.txt    /   cat captain-hat.txt
+
+#Pipe, filter and sort data
+
+#The operator | is used to use the output of a cmdlet as input of another cmdlet
+#The command Where-object filters the output of the first cmdlet
+#The command Sort-Object sorts the result
+Get-ChildItem | Where-Object -Property "Extension" -eq ".txt" | Sort-Object Length
+#The command Select-Object is used to select specific properties from objects
+Get-ChildItem | Select-Object Name,Length 
+
+
+#Gets system info
+Get-ComputerInfo
+
+#Lists all the local user accounts on the system
+Get-LocalUser
+
+#Provides detailed information about the network interfaces on the system
+Get-NetIPConfiguration
+
+#Shows details for all IP addresses configured on the system
+Get-NetIPAddress
+
+#Provides a detailed view of all currently running processes
+Get-Process
+
+#Allows the retrieval of information about the status of services on the machine
+Get-Service
+
+#Displays current TCP connections
+Get-NetTCPConnection
+
+# generates file hashes
+Get-FileHash -Path .\my_file.txt
+
+#Executes commands on remote systems
+Invoke-Command -FilePath c:\scripts\test.ps1 -ComputerName Server01
+Invoke-Command -ComputerName Server01 -Credential Domain01\User01 -ScriptBlock { Get-Culture }
