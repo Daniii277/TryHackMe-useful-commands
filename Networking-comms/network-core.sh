@@ -75,3 +75,126 @@ File may not have transferred correctly.
 ftp> quit
 221 Goodbye.
 #--------------------------------------------------
+
+#SMTP : Defines how a mail client talks with a mail server and how a mail server talks with another
+telnet 10.130.129.207 25
+
+#Result -------------------------------------------
+Trying 10.130.129.207...
+Connected to 10.130.129.207.
+Escape character is '^]'.
+220 example.thm ESMTP Exim 4.95 Ubuntu Thu, 27 Jun 2024 16:18:09 +0000
+HELO client.thm
+250 example.thm Hello client.thm [10.11.81.126]
+MAIL FROM: <user@client.thm>
+250 OK
+RCPT TO: <strategos@server.thm>
+250 Accepted
+DATA
+354 Enter message, ending with "." on a line by itself
+From: user@client.thm
+To: strategos@server.thm
+Subject: Telnet email
+
+Hello. I am using telnet to send you an email!
+.
+250 OK id=1sMrpq-0001Ah-UT
+QUIT
+221 example.thm closing connection
+Connection closed by foreign host.
+#--------------------------------------------------
+
+#POP3 : Allow the client to communicate with a mail server and retrieve email messages
+telnet 10.130.129.207 110
+
+#Result -------------------------------------------
+Trying 10.130.129.207...
+Connected to 10.130.129.207.
+Escape character is '^]'.
++OK [XCLIENT] Dovecot (Ubuntu) ready.
+AUTH
++OK
+PLAIN
+.
+USER name
++OK
+PASS password
++OK Logged in.
+STAT
++OK 4 2216
+LIST
++OK 4 messages:
+1 690
+2 589
+3 483
+4 454
+.
+RETR 4
++OK 454 octets
+Return-path: <user@client.thm>
+Envelope-to: name@server.thm
+Delivery-date: Thu, 12 Sep 2024 20:12:42 +0000
+Received: from [10.11.81.126] (helo=client.thm)
+	by example.thm with smtp (Exim 4.95)
+	(envelope-from <user@client.thm>)
+	id 1soqAj-0007li-39
+	for linda@server.thm;
+	Thu, 12 Sep 2024 20:12:42 +0000
+From: user@client.thm
+To: name@server.thm
+Subject: Your Flag
+
+Hello!
+Here's your flag:
+THM{TELNET_RETR_EMAIL}
+Enjoy your journey!
+.
+QUIT
++OK Logging out.
+Connection closed by foreign host.
+'
+#------------------------------------------------
+
+
+# IMAP : One solution to maintaining a synchronized mailbox across multiple devices.
+telnet 10.10.41.192 143
+
+#Result -----------------------------------------
+Trying 10.10.41.192...
+Connected to 10.10.41.192.
+Escape character is '^]'.
+* OK [CAPABILITY IMAP4rev1 SASL-IR LOGIN-REFERRALS ID ENABLE IDLE LITERAL+ STARTTLS AUTH=PLAIN] Dovecot (Ubuntu) ready.
+A LOGIN strategos
+A OK [CAPABILITY IMAP4rev1 SASL-IR LOGIN-REFERRALS ID ENABLE IDLE SORT SORT=DISPLAY THREAD=REFERENCES THREAD=REFS THREAD=ORDEREDSUBJECT MULTIAPPEND URL-PARTIAL CATENATE UNSELECT CHILDREN NAMESPACE UIDPLUS LIST-EXTENDED I18NLEVEL=1 CONDSTORE QRESYNC ESEARCH ESORT SEARCHRES WITHIN CONTEXT=SEARCH LIST-STATUS BINARY MOVE SNIPPET=FUZZY PREVIEW=FUZZY PREVIEW STATUS=SIZE SAVEDATE LITERAL+ NOTIFY SPECIAL-USE] Logged in
+B SELECT inbox
+* FLAGS (\Answered \Flagged \Deleted \Seen \Draft)
+* OK [PERMANENTFLAGS (\Answered \Flagged \Deleted \Seen \Draft \*)] Flags permitted.
+* 4 EXISTS
+* 0 RECENT
+* OK [UNSEEN 2] First unseen.
+* OK [UIDVALIDITY 1719824692] UIDs valid
+* OK [UIDNEXT 5] Predicted next UID
+B OK [READ-WRITE] Select completed (0.001 + 0.000 secs).
+C FETCH 3 body[]
+* 3 FETCH (BODY[] {445}
+Return-path: <user@client.thm>
+Envelope-to: strategos@server.thm
+Delivery-date: Thu, 27 Jun 2024 16:19:35 +0000
+Received: from [10.11.81.126] (helo=client.thm)
+        by example.thm with smtp (Exim 4.95)
+        (envelope-from <user@client.thm>)
+        id 1sMrpq-0001Ah-UT
+        for strategos@server.thm;
+        Thu, 27 Jun 2024 16:19:35 +0000
+From: user@client.thm
+To: strategos@server.thm
+Subject: Telnet email
+
+Hello. I am using telnet to send you an email!
+)
+C OK Fetch completed (0.001 + 0.000 secs).
+D LOGOUT
+* BYE Logging out
+D OK Logout completed (0.001 + 0.000 secs).
+Connection closed by foreign host.
+#------------------------------------------------
